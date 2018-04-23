@@ -20,21 +20,22 @@ int		get_next_line(const int fd, char **line)
 	{
 		if (!arr[fd])
 			arr[fd] = strdup(buffer);
-		else
+		if (!ft_strchr(arr[fd], '\n'))
 		{
 		  //printf("start:%s\n", *line);
 
 			tmp = arr[fd];
 			//printf("pointer:%s\n", *line);
 			arr[fd] = ft_strjoin(arr[fd], buffer);
+			//ft_strtrim(arr[fd]);
 			//printf("joined:%s\n", *line);
 			ft_strdel(&tmp);
 		}
 		ft_bzero(buffer, BUFF_SIZE);
 		//line = &buffer;
 	}
-	*line = ft_strdup(arr[fd]);
-	return (c);
+	*line = ft_strtrim(arr[fd]);
+	return (1);
 }
 
 int		main()
@@ -44,6 +45,5 @@ int		main()
 
 	fd = open("test.txt", O_RDONLY);
 	get_next_line(fd, &arr);
-	printf("%s\n", arr);
-
+	printf("%s", arr);
 }
