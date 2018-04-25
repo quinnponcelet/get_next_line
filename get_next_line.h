@@ -6,7 +6,7 @@
 /*   By: qponcele <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/17 22:40:08 by qponcele          #+#    #+#             */
-/*   Updated: 2018/04/23 16:00:08 by qponcele         ###   ########.fr       */
+/*   Updated: 2018/04/25 12:11:13 by qponcele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 int	get_next_line(const int fd, char **line);
-#define BUFF_SIZE 160
+#define BUFF_SIZE 16
 
 
 #endif

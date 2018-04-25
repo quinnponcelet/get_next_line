@@ -1,7 +1,4 @@
-0123456789012345678901234567890
-strings to break my shit
-duuuuuuudeeeeeeeeeeeeeeeeeeee
-testing if this shit really works or if it just appears to work for what i had,
-back to breaking my shit
-with strings of course my dooode
+this line will still break shit
+is this only broken in the first iteration
+thesere ilsikef;laksdf;lkajsd[gjaosignal'ske
 
