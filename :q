@@ -4,23 +4,17 @@
 #include "get_next_line.h"
 #include "./libft/libft.h"
 
-int		get_line(const int fd, char **arr)
+int		get_line(const int fd, char *arr)
 {
-	char buff[BUFF_SIZE + 1];
+	char *buff[BUFF_SIZE + 1];
 	int r;
-	
-	r = 1;
-	//printf("broke\n");
-	while (!ft_strchr(*arr, '\n') && r > 0)
+	printf("broke here\n");	
+	while (!ft_strchr(arr, '\n') && r > 0)
 	{
-		//printf("very nice\n");
+		printf("very nice\n");
 		r = read(fd, buff, BUFF_SIZE);
-		//printf("broke2\n");
-		buff[r] = '\0';
-		*arr = ft_strjoin(*arr, buff);
-		//printf("joined\n%s\n", *arr);
+		arr = ft_strjoin(arr, *buff);
 	}
-	//printf("finished\n");
 	return (r);
 }
 
@@ -28,33 +22,24 @@ int		get_line(const int fd, char **arr)
 int		get_next_line(const int fd, char **line)
 {
 	static char *arr;
-	char		*tmp;
-	int			r;
-	
+	char *tmp;
+
 	if (!arr)
 		arr = ft_strnew(BUFF_SIZE);
 	if (!line || fd < 0 || BUFF_SIZE < 0 || -1 == read(fd, arr, 0))
-	{
-		printf("failed\n");
 		return (-1);
-	}
-	if (get_line(fd, &arr) < 0)
-	{
-		printf("read failed\n");
+	if (get_line(fd, arr) < 0)
 		return (-1);
-	}
-	//printf("%s\n", arr);
-	if ((tmp = ft_strchr(arr, '\n')))
+	if (tmp == ft_strchr(arr, '\n'))
 	{
-		//printf("weird\n");
 		*tmp = '\0';
 		tmp++;
 		*line = ft_strdup(arr);
 		arr = ft_strdup(tmp);
-		//printf("success\n");
 		return (1);
 	}
-	*line = ft_strdup(arr);
+	else
+		*line = ft_strdup(arr);
 	return (0);
 }
 
