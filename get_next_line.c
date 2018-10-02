@@ -71,7 +71,10 @@ int		main(int ac, char **av)
 
 	fd = open(av[1], O_RDONLY);
 	while (get_next_line(fd, &line) == 1)
+	{
 		printf("Return Line:%s\n", line);
+		free(line);
+	}
 	while (1)
 	   ;
 	return (1);
