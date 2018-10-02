@@ -1,144 +1,57 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qponcele <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/02 13:32:32 by qponcele          #+#    #+#             */
+/*   Updated: 2018/10/02 15:34:37 by qponcele         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 #include "./libft/libft.h"
 
 int		get_line(const int fd, char **arr)
 {
-	char buff[BUFF_SIZE + 1];
-	int r;
-	
+	char	buff[BUFF_SIZE + 1];
+	char	*mem;
+	int		r;
+
 	r = 1;
-	//printf("broke\n");
 	while (!ft_strchr(*arr, '\n') && r > 0)
 	{
-		//printf("very nice\n");
 		r = read(fd, buff, BUFF_SIZE);
-		//printf("broke2\n");
 		buff[r] = '\0';
+		mem = *arr;
 		*arr = ft_strjoin(*arr, buff);
-		//printf("joined\n%s\n", *arr);
+		ft_strdel(&mem);
 	}
-	//printf("finished\n");
 	return (r);
 }
-
 
 int		get_next_line(const int fd, char **line)
 {
-	static char *arr;
+	static char *arr[4865];
 	char		*tmp;
-	int			r;
-	
-	if (!arr)
-		arr = ft_strnew(BUFF_SIZE);
-	if (!line || fd < 0 || BUFF_SIZE < 0 || -1 == read(fd, arr, 0))
-	{
-		printf("failed\n");
+	char		*mem;
+
+	if ((fd >= 0 && fd < 4865) && !arr[fd])
+		arr[fd] = ft_strnew(BUFF_SIZE);
+	if (!line || fd < 0 || fd > 4864 || BUFF_SIZE < 0 ||
+		-1 == read(fd, arr[fd], 0) || get_line(fd, &arr[fd]) < 0)
 		return (-1);
-	}
-	if (get_line(fd, &arr) < 0)
+	if ((tmp = ft_strchr(arr[fd], '\n')))
 	{
-		printf("read failed\n");
-		return (-1);
-	}
-	//printf("%s\n", arr);
-	if ((tmp = ft_strchr(arr, '\n')))
-	{
-		//printf("weird\n");
-		*tmp = '\0';
-		tmp++;
-		*line = ft_strdup(arr);
-		arr = ft_strdup(tmp);
-		//printf("success\n");
+		mem = arr[fd];
+		*tmp++ = '\0';
+		*line = ft_strdup(arr[fd]);
+		arr[fd] = ft_strdup(tmp);
+		ft_strdel(&mem);
 		return (1);
 	}
-	*line = ft_strdup(arr);
-	return (0);
+	*line = ft_strdup(arr[fd]);
+	ft_bzero(arr[fd], ft_strlen(arr[fd]));
+	return (ft_strlen(*line) > 0 ? 1 : 0);
 }
-
-int		main(int ac, char **av)
-{
-	char *line;
-	int fd;
-
-	if (ac != 2)
-	{
-		write (1, "nah\n", 4);
-		return (0);
-	}
-
-	fd = open(av[1], O_RDONLY);
-	while (get_next_line(fd, &line) == 1)
-	{
-		printf("Return Line:%s\n", line);
-		free(line);
-	}
-	while (1)
-	   ;
-	return (1);
-}
-
-
-/*int		get_line1(const int fd, char *arr, char *line)
-{
-	int r;
-	int i;
-	char buffer[BUFF_SIZE + 1];
-	char *tmp;
-	
-	i = 0;
-	//line = ft_strnew(BUFF_SIZE);
-	//ft_bzero(line, BUFF_SIZE);
-	//printf("bzero check2\n");
-	//if (!arr)
-	//	arr = ft_strnew(BUFF_SIZE);
-	//printf("arr check\n");
-	while ((r = read(fd, buffer, BUFF_SIZE)) > 0)
-	{
-		printf("while loop start\n");
-		if (!line)
-		{
-			printf("this should happen once");
-			line = ft_strdup(buffer);
-		}
-			
-		if (tmp == ft_strchr(buffer, '\n'))
-		{
-			printf("strchr\n");
-			*tmp = '\0';
-			tmp++;
-			line = ft_strdup(buffer);
-			arr = ft_strdup(tmp);
-			return (1);
-		}
-		else
-		{
-			printf("join\n");
-			line = ft_strjoin(arr, line);
-			printf("%s", line);
-		}
-
-	//	printf("duptest\n%s\n", buffer);
-	//	line = ft_strdup(buffer);
-		
-	}
-	return (r);
-	//ft_bzero(buffer, BUFF_SIZE);
-	//printf("bzero check\n");
-}
-
-int		linechecker(char *line, char *buff, char *arr, int c)
-{
-	char *tmp;
-
-	if (tmp == ft_strchr(buff, '\n'))
-	{
-		*tmp = '\0';
-		tmp++;
-		line = ft_strdup(buffer);
-		arr = ft_strdup(tmp);
-		return (1);
-	}
-*/
